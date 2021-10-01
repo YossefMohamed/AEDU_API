@@ -12,6 +12,7 @@ const classResolvers = {
       const classes = await Class.find({
         "users.user": userId,
       });
+
       return classes;
     },
     getInvitations: async (_, args, context) => {
@@ -20,10 +21,42 @@ const classResolvers = {
         "invitations",
         "-users"
       );
+      if (!user) throw new Error("User not found");
       return user.invitations;
     },
   },
   Mutation: {
+    acceptInvitations: async (_, args, context) => {
+      const userId = getUserId(context.req);
+      const user = await User.findById(userId);
+      if (!user) throw new Error("User not found");
+      user.invitations = user.invitations.filter(
+        (item) => !item.equals(args.class)
+      );
+      if (user.classes.includes(args.class)) throw new Error("Already Added");
+      user.classes.push(args.class);
+      await user.save();
+      return user;
+    },
+    rejectInvitations: async (_, args, context) => {
+      const userId = getUserId(context.req);
+      const user = await User.findById(userId);
+      if (!user) throw new Error("User not found");
+
+      user.invitations = user.invitations.filter(
+        (item) => !item.equals(args.class)
+      );
+      await user.save();
+      return user;
+    },
+    getOutFromClass: async (_, args, context) => {
+      const userId = getUserId(context.req);
+      const user = await User.findById(userId);
+      if (!user) throw new Error("User not found");
+      user.classes = user.classes.filter((item) => !item.equals(args.class));
+      await user.save();
+      return user;
+    },
     createClass: async (_, args, context) => {
       try {
         const userId = getUserId(context.req);

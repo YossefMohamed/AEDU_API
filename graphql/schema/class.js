@@ -20,6 +20,9 @@ const classTypeDefs = gql`
   extend type Mutation {
     createClass(name: String!): Class!
     addUserToClass(class: String!, user: String!, role: String): Class
+    acceptInvitations(class: String!): User!
+    rejectInvitations(class: String!): User!
+    getOutFromClass(class: String!): User!
   }
 `;
 

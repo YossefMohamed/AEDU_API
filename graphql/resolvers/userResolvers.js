@@ -8,9 +8,10 @@ module.exports = {
       const users = await User.find();
       return users;
     },
-    getUser: async (_, args) => {
-      const user = await User.findOne({ name: args.user });
-      if (!user) throw new Error("Not Found");
+    getUser: async (_, args, context) => {
+      const userId = getUserId(context.req);
+      const user = await User.findById(userId);
+      if (!user) throw new Error("User not found");
       return user;
     },
     login: async (parant, args, context) => {
@@ -54,6 +55,8 @@ module.exports = {
       const userId = getUserId(context.req);
       if (!userId) throw new Error("Please Login!");
       const user = await User.findById(userId);
+      if (!user) throw new Error("User not found");
+
       user.email = args.email || user.email;
       user.name = args.name || user.name;
 
@@ -69,7 +72,7 @@ module.exports = {
       const userId = getUserId(context.req);
       if (!userId) throw new Error("Please Login!");
       const user = await User.findById(userId);
-      console.log(userId);
+      if (!user) throw new Error("User not found");
       const deletedUser = await User.findByIdAndDelete(userId);
 
       return deletedUser;

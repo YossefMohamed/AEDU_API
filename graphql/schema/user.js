@@ -15,7 +15,7 @@ const userTypeDefs = gql`
   extend type Query {
     getUsers: [User!]!
     login(email: String!, password: String!): AuthPayload!
-    getUser(user: String!): User!
+    getUser: User!
   }
   extend type Mutation {
     deleteUser: User!
@@ -25,7 +25,6 @@ const userTypeDefs = gql`
       password: String!
       confirmPassword: String!
     ): AuthPayload!
-
     updateUser(name: String, email: String, password: String): AuthPayload!
   }
   type AuthPayload {
