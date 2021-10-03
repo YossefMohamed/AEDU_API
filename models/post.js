@@ -3,10 +3,14 @@ const mongoose = require("mongoose");
 const postSchema = mongoose.Schema(
   {
     image: String,
-
+    class: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Class",
+      required: [true, "Which Class?"],
+    },
     content: {
       type: String,
-      required: [true , "Please enter the post content"]
+      required: [true, "Please enter the post content"],
     },
     author: {
       type: mongoose.Schema.Types.ObjectId,
