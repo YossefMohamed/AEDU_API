@@ -12,6 +12,7 @@ const { ApolloServerPluginDrainHttpServer } = require("apollo-server-core");
 const connectDB = require("./mongodb.js");
 const classTypeDefs = require("./graphql/schema/class");
 const postTypeDefs = require("./graphql/schema/post");
+const messageTypeDefs = require("./graphql/schema/message");
 const app = express();
 const httpServer = http.createServer(app);
 connectDB();
@@ -26,7 +27,13 @@ const rootTypeDef = gql`
 app.use(express.json());
 
 const server = new ApolloServer({
-  typeDefs: [rootTypeDef, userTypeDefs, classTypeDefs, postTypeDefs],
+  typeDefs: [
+    rootTypeDef,
+    userTypeDefs,
+    classTypeDefs,
+    postTypeDefs,
+    messageTypeDefs,
+  ],
   resolvers: rootResolver,
   plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   context: (req) => ({ ...req }),

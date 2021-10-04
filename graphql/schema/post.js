@@ -16,6 +16,7 @@ const postTypeDefs = gql`
     addPost(content: String!, class: String!): Post!
     updatePost(post: String!, content: String, image: String): Post!
     deletePost(post: String!): Post!
+    likePost(post: String!): Post!
   }
 `;
 module.exports = postTypeDefs;

@@ -15,6 +15,7 @@ const messageSchema = mongoose.Schema(
       ref: "User",
       required: [true, "Who Is The Author !"],
     },
+    createdAt: { type: Date, required: true, default: Date.now },
   },
   { timestamps: true }
 );

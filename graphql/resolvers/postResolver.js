@@ -27,7 +27,15 @@ module.exports = {
       await Post.findByIdAndDelete(args.post);
       return post;
     },
-
+    likePost: async (_, args, context) => {
+      const userId = getUserId(context.req);
+      let post = await Post.findById(args.post);
+      if (!post) throw new Error("Not Found!");
+      post.likes.includes(userId) && post.likes.push(userId);
+      post.likes = post.likes.filter((like) => like !== userId);
+      await post.save();
+      return post;
+    },
     addPost: async (_, args, context) => {
       const userId = getUserId(context.req);
       const user = await User.findById(userId);
