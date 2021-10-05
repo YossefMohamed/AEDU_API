@@ -1,3 +1,4 @@
+const Comment = require("../../models/comment.js");
 const getUserId = require("../../util/getUserId.js");
 const Post = require("./../../models/post.js");
 const User = require("./../../models/user.js");
@@ -5,8 +6,14 @@ const User = require("./../../models/user.js");
 module.exports = {
   Query: {
     getPosts: async (parent, args, context, info) => {
-      let posts = await Post.find({});
+      let posts = await Post.find({}).populate("comments");
       return posts;
+    },
+    getPost: async (parent, args, context, info) => {
+      let post = await Post.findOne({
+        id: args.post,
+      }).populate("comments");
+      return post;
     },
   },
   Mutation: {
@@ -23,6 +30,9 @@ module.exports = {
     deletePost: async (_, args, context) => {
       const userId = getUserId(context.req);
       let post = await Post.findById(args.post);
+      const comments = await Comment.remove({
+        post: post.id,
+      });
       if (!post.author.equals(userId)) throw new Error("Not Authorized !");
       await Post.findByIdAndDelete(args.post);
       return post;

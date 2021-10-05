@@ -13,6 +13,7 @@ const connectDB = require("./mongodb.js");
 const classTypeDefs = require("./graphql/schema/class");
 const postTypeDefs = require("./graphql/schema/post");
 const messageTypeDefs = require("./graphql/schema/message");
+const commentTypeDefs = require("./graphql/schema/comment");
 const app = express();
 const httpServer = http.createServer(app);
 connectDB();
@@ -33,6 +34,7 @@ const server = new ApolloServer({
     classTypeDefs,
     postTypeDefs,
     messageTypeDefs,
+    commentTypeDefs,
   ],
   resolvers: rootResolver,
   plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],

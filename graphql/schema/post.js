@@ -8,9 +8,11 @@ const postTypeDefs = gql`
     likes: [String]
     id: String!
     class: String!
+    comments: [Comment]
   }
   extend type Query {
     getPosts(class: String!): [Post]
+    getPost(post: String!): Post!
   }
   extend type Mutation {
     addPost(content: String!, class: String!): Post!
